@@ -17,45 +17,38 @@ class FileExtention(Enum):
     WEBP = ".webp"
     TXT = ".txt"
 
-def get_file_extention(file):
+
+
+def get_file_extension(file):
     return os.path.splitext(file)[1]
 
 def set_option_by_file_extension(file_extention):
-    options = []
+    file_extension_dict = {
+        FileExtention.PNG.value: ["JPG", "BMP", "WEBP"],
+        FileExtention.JPG.value: ["PNG", "BMP", "WEBP"],
+        FileExtention.WEBP.value: ["PNG", "JPG"],
+        FileExtention.PDF.value: ["PNG", "TXT"],
+        FileExtention.TXT.value: ["PDF"]
+    }
 
-    if (file_extention == FileExtention.PNG.value):
-        options = ["JPG", "BMP", "WEBP"]
-    elif(file_extention == FileExtention.JPG.value):
-        options = ["PNG", "BMP", "WEBP"]
-    elif(file_extention == FileExtention.WEBP.value):
-        options = ["PNG", "JPG"]
-    elif(file_extention == FileExtention.PDF.value):
-        options = ["PNG", "TXT"]
-    elif(file_extention == FileExtention.TXT.value):
-        options = ["PDF"]
-
-    return options
+    return file_extension_dict[file_extention]
 
 def convert_file(file, file_extention, desired_option):
 
+    conversion_dict = {
+        FileExtention.PNG.value: PNGConversion.convert(file, file_extention, desired_option),
+        FileExtention.JPG.value: JPGConversion.convert(file, file_extention, desired_option),
+        FileExtention.WEBP.value: WEBPConversion.convert(file, file_extention, desired_option),
+        FileExtention.PDF.value: PDFConversion.convert(file, file_extention, desired_option),
+        FileExtention.TXT.value: TXTConversion.convert(file, file_extention, desired_option)
+    }
 
-
-    if (file_extention == FileExtention.PNG.value):
-        PNGConversion.convert(file, file_extention, desired_option)
-    elif(file_extention == FileExtention.JPG.value):
-        JPGConversion.convert(file, file_extention, desired_option)
-    elif(file_extention == FileExtention.WEBP.value):
-        WEBPConversion.convert(file, file_extention, desired_option)
-    elif(file_extention == FileExtention.PDF.value):
-        PDFConversion.convert(file, file_extention, desired_option)
-    elif(file_extention == FileExtention.TXT.value):
-        TXTConversion.convert(file, file_extention, desired_option)
-
+    return conversion_dict[file_extention]
 
 def open_explorer():
     file = filedialog.askopenfilename()
 
-    file_extention = get_file_extention(file)
+    file_extention = get_file_extension(file)
 
     if any(file_extention == ext.value for ext in FileExtention):
 
