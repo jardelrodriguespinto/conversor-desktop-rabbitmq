@@ -1,4 +1,3 @@
-from tkinter import *
 from tkinter import ttk
 import os
 from tkinter import filedialog
@@ -8,19 +7,12 @@ from conversion.pdf_conversion import PDFConversion
 from conversion.png_conversion import PNGConversion
 from conversion.txt_conversion import TXTConversion
 from conversion.webp_conversion import WEBPConversion
-from enum import Enum
-
-class FileExtention(Enum):
-    PDF = ".pdf"
-    JPG = ".jpg"
-    PNG = ".png"
-    WEBP = ".webp"
-    TXT = ".txt"
-
+from enum.file_extention import FileExtention
 
 
 def get_file_extension(file):
     return os.path.splitext(file)[1]
+
 
 def set_option_by_file_extension(file_extention):
     file_extension_dict = {
@@ -32,6 +24,7 @@ def set_option_by_file_extension(file_extention):
     }
 
     return file_extension_dict[file_extention]
+
 
 def convert_file(file, file_extention, desired_option):
 
@@ -45,7 +38,8 @@ def convert_file(file, file_extention, desired_option):
 
     return conversion_dict[file_extention]
 
-def open_explorer():
+
+def open_explorer(frm):
     file = filedialog.askopenfilename()
 
     file_extention = get_file_extension(file)
@@ -65,15 +59,4 @@ def open_explorer():
     else:
         print("Formato não suportado")
 
-root = Tk()
-frm = ttk.Frame(root, padding=100)
-
-frm.grid()
-
-ttk.Progressbar().location(10, 10)
-
-label = ttk.Label(frm, text="Selecione um arquivo que deseja converter:").grid(column=10, row=0, sticky="w", pady=10)
-button = ttk.Button(frm, text="Carregar arquivo", command=open_explorer).grid(column=10, row=2)
-
-root.mainloop()
 
